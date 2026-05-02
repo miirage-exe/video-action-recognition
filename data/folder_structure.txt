@@ -1,0 +1,12 @@
+data/
+├── folder_structure.txt
+├── UCF-101/
+│   ├── ApplyEyeMakeup/
+│   ├── ApplyLipstick/
+│   ├── Archery/
+│   └── etc...
+└── UCF-101-TrainTestList/
+    ├── classInd.txt
+    ├── testlist01.txt
+    ├── testlist02.txt
+    └── etc...
