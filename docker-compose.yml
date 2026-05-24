@@ -1,0 +1,18 @@
+services:
+  notebook:
+    build: .
+    # Enable NVIDIA GPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "8888:8888"
+    volumes:
+      # Mount the dataset folder (UCF-101 videos + train/test splits)
+      - ./data:/workspace/data
+      # Mount the notebook so edits are saved back to the host
+      - ./ActionRecognition_GPU.ipynb:/workspace/ActionRecognition_GPU.ipynb

@@ -1,0 +1,5 @@
+.git
+data/UCF-101
+*.pdf
+report.tex
+ActionRecongnition-UCF101.ipynb
