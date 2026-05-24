@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────────────────────────
-# Video Action Recognition — GPU Jupyter Environment
+# Video Action Recognition — GPU Training Environment
 # Base: PyTorch 2.5.1 + CUDA 12.4 + cuDNN 9
 # ──────────────────────────────────────────────────────────────────────────────
 FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
@@ -12,30 +12,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /workspace
 
-# Python dependencies (pinned for reproducibility)
+# Python dependencies
 RUN pip install --no-cache-dir \
     opencv-python-headless==4.10.0.84 \
     scikit-learn==1.5.2 \
     matplotlib==3.9.2 \
-    tqdm==4.66.5 \
-    jupyterlab==4.2.5
+    tqdm==4.66.5
 
-# Copy the notebook into the image
-COPY ActionRecognition_GPU.ipynb .
+# Paths injected via environment variables (same variables used in the notebook)
+ENV DATA_DIR=/workspace/data/UCF-101
+ENV SPLIT_DIR=/workspace/data/UCF-101-TrainTestlist
+ENV OUT_DIR=/workspace/outputs
 
-# ── Data layout inside the container ─────────────────────────────────────────
-# Mount your local ./data folder to /workspace/data via docker-compose.
-# Then update the two path variables in Cell 3 of the notebook:
-#
-#   DATA_DIR  = Path("/workspace/data/UCF-101")
-#   SPLIT_DIR = Path("/workspace/data/UCF-101-TrainTestlist")
-# ─────────────────────────────────────────────────────────────────────────────
-RUN mkdir -p data
+# Copy the generated training script (run `make train.py` before building)
+COPY train.py .
 
-EXPOSE 8888
+RUN mkdir -p data outputs
 
-# Launch JupyterLab (no token so the browser opens directly)
-CMD ["jupyter", "lab", \
-     "--ip=0.0.0.0", "--port=8888", \
-     "--no-browser", "--allow-root", \
-     "--NotebookApp.token=''", "--NotebookApp.password=''"]
+CMD ["python", "-u", "train.py"]

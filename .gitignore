@@ -1,2 +1,6 @@
 data/*
 !data/folder_structure.txt
+
+# Generated from the notebook via `make train.py`. Not committed
+train.py
+outputs/
