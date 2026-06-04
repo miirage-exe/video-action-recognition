@@ -3,4 +3,3 @@ data/*
 
 # Generated from the notebook via `make train.py`. Not committed
 train.py
-outputs/
